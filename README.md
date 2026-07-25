@@ -1,4 +1,3 @@
-# Piyachet Saengchan
 
 ### AI / LLM Builder · Full-stack Developer
 
