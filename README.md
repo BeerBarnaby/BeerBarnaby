@@ -24,23 +24,7 @@ My work moves between **LLM applications**, **multi-agent experiments**, **model
 
 Less noise. Better questions. Systems that actually work.
 
-<details>
-<summary><code>02 / UNSEAL THE ARCHIVE</code> — selected work</summary>
-
-<br />
-
-| Project | Field notes |
-| :-- | :-- |
-| **QuizSensei** | AI-assisted quizzes, Python backend, database migrations, and frontend development. |
-| **Multi-Agent LLM Evaluation** | Controlled experiments on agent behavior across model configurations and interaction settings. |
-| **AI Innovation Assistant** | A Next.js assistant experience with interactive product and portfolio interfaces. |
-| **GamesFit** | A gamified, installable fitness web application. |
-
-*Some projects are still behind closed doors.*
-
-</details>
-
-### `03 / INSTRUMENTS`
+### `02 / INSTRUMENTS`
 
 `Python` · `TypeScript` · `JavaScript` · `Next.js` · `SQL` · `Docker` · `Git`
 
