@@ -1,51 +1,53 @@
+<div align="center">
+  <img src="./assets/after-dark.svg" alt="BeerBarnaby — Beyond the visible. AI systems, agent behavior, and software engineering." width="100%" />
 
-### AI / LLM Builder · Full-stack Developer
+  <br />
 
-I build intelligent products that connect **large language models, multi-agent systems, and modern full-stack engineering**.
+  <samp>Not every idea needs a spotlight.</samp>
+</div>
 
-My focus is turning AI ideas into reliable, useful software—from experiment design and model behavior evaluation to polished interfaces and production-ready applications.
+<br />
 
-## What I work on
+```text
+> connection established
+> identity   : BeerBarnaby
+> interests  : intelligence / behavior / interfaces
+> approach   : observe -> question -> build -> evaluate
+> status     : quietly in progress
+```
 
-- 🤖 **LLM Applications** — designing AI-powered workflows, assistants, and product experiences around real user needs.
-- 🧠 **Multi-Agent Systems** — exploring coordination, reasoning, honesty, and emergent behavior across interacting AI agents.
-- 🛡️ **AI Safety & Evaluation** — building structured experiments for deception, reliability, model scale, reasoning modes, and agent dynamics.
-- ⚡ **Full-stack Products** — connecting thoughtful frontend experiences with robust APIs, databases, and deployment workflows.
+### `01 / BELOW THE SURFACE`
 
-## Selected projects
+I build **AI-powered software** and explore how intelligent systems behave.
 
-### QuizSensei
-An AI-assisted quiz platform with a Python backend, database migrations, Docker-based development, and a dedicated frontend.
+My work moves between **LLM applications**, **multi-agent experiments**, **model evaluation**, and **full-stack engineering**.
 
-### Multi-Agent LLM Evaluation
-A controlled social-deduction research design that studies AI behavior across model sizes, reasoning configurations, and agent counts through a 225-game evaluation plan.
+Less noise. Better questions. Systems that actually work.
 
-### AI Innovation Assistant
-A modern Next.js experience combining an interactive AI assistant, portfolio storytelling, and a complete contact workflow.
+<details>
+<summary><code>02 / UNSEAL THE ARCHIVE</code> — selected work</summary>
 
-### GamesFit
-An installable Progressive Web App that combines product design, gamification, and fitness-focused user experiences.
+<br />
 
-## Tech stack
+| Project | Field notes |
+| :-- | :-- |
+| **QuizSensei** | AI-assisted quizzes, Python backend, database migrations, and frontend development. |
+| **Multi-Agent LLM Evaluation** | Controlled experiments on agent behavior across model configurations and interaction settings. |
+| **AI Innovation Assistant** | A Next.js assistant experience with interactive product and portfolio interfaces. |
+| **GamesFit** | A gamified, installable fitness web application. |
 
-![Python](https://img.shields.io/badge/Python-0B1220?style=for-the-badge&logo=python)
-![TypeScript](https://img.shields.io/badge/TypeScript-0B1220?style=for-the-badge&logo=typescript)
-![JavaScript](https://img.shields.io/badge/JavaScript-0B1220?style=for-the-badge&logo=javascript)
-![Next.js](https://img.shields.io/badge/Next.js-0B1220?style=for-the-badge&logo=nextdotjs)
-![Docker](https://img.shields.io/badge/Docker-0B1220?style=for-the-badge&logo=docker)
-![Git](https://img.shields.io/badge/Git-0B1220?style=for-the-badge&logo=git)
+*Some projects are still behind closed doors.*
 
-`LLMs` · `Multi-Agent Systems` · `AI Evaluation` · `Python` · `TypeScript` · `Next.js` · `APIs` · `SQL` · `Docker`
+</details>
 
-## Engineering mindset
+### `03 / INSTRUMENTS`
 
-- Build around real problems, not AI hype.
-- Evaluate behavior before trusting outputs.
-- Keep systems understandable, testable, and maintainable.
-- Turn prototypes into products people can actually use.
+`Python` · `TypeScript` · `JavaScript` · `Next.js` · `SQL` · `Docker` · `Git`
 
-> Intelligent systems. Thoughtful products. Real-world impact.
+`LLMs` · `Multi-Agent Systems` · `AI Evaluation` · `APIs`
 
 ---
 
-Currently building at the intersection of **AI, LLMs, and full-stack product engineering**.
+<div align="center">
+  <sub>THE INTERESTING PART IS USUALLY WHAT YOU CAN'T SEE.</sub>
+</div>
