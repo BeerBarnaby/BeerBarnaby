@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">BeerBarnaby — Beyond the visible</title>
+  <desc id="desc">A minimalist midnight sky, thin lunar crescent, and a quiet signal from an AI and software builder.</desc>
+  <defs>
+    <radialGradient id="night" cx="21%" cy="49%" r="90%">
+      <stop offset="0" stop-color="#131c2a"/>
+      <stop offset=".58" stop-color="#0b111b"/>
+      <stop offset="1" stop-color="#06090e"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b6c8d5" stop-opacity="0"/>
+      <stop offset=".28" stop-color="#b6c8d5" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#b6c8d5" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="disc"><circle cx="206" cy="160" r="73"/></clipPath>
+  </defs>
+  <rect width="1200" height="360" fill="url(#night)"/>
+  <g fill="#cad9e8" opacity=".65">
+    <circle cx="63" cy="58" r="1.2"/><circle cx="132" cy="110" r=".8"/><circle cx="291" cy="73" r="1"/>
+    <circle cx="335" cy="137" r=".9"/><circle cx="92" cy="248" r="1.1"/><circle cx="310" cy="292" r=".8"/>
+    <circle cx="386" cy="45" r=".7"/><circle cx="760" cy="48" r=".8"/><circle cx="903" cy="91" r=".9"/>
+    <circle cx="1089" cy="72" r="1.1"/><circle cx="1151" cy="181" r=".8"/><circle cx="1020" cy="252" r=".75"/>
+    <circle cx="865" cy="300" r=".8"/><circle cx="628" cy="301" r=".75"/><circle cx="452" cy="292" r=".85"/>
+  </g>
+  <g opacity=".20" stroke="#a5bac9" fill="none">
+    <circle cx="206" cy="160" r="99" stroke-dasharray="2 10"/>
+    <circle cx="206" cy="160" r="123" stroke-opacity=".38"/>
+    <path d="M24 160H83 M329 160H378 M206 16V43 M206 280V304"/>
+    <path d="M33 315 Q206 272 370 315" stroke-opacity=".23"/>
+  </g>
+  <circle cx="206" cy="160" r="73" stroke="#afc0d1" stroke-width="1.5" fill="none" opacity=".82"/>
+  <g clip-path="url(#disc)">
+    <circle cx="206" cy="160" r="52" fill="#e5edf2"/>
+    <circle cx="232" cy="139" r="51" fill="#111b28"/>
+  </g>
+  <path d="M93 225 Q135 218 156 225 Q201 238 246 223 Q282 212 317 226" fill="none" stroke="#728a9f" stroke-width="1" opacity=".48"/>
+  <g font-family="Consolas, 'Liberation Mono', monospace" fill="#8195a7" font-size="11" letter-spacing="2">
+    <text x="58" y="34">NIGHT SHIFT / 001</text>
+    <text x="55" y="340">NO SIGNAL LOST</text>
+    <text x="1140" y="340" text-anchor="end">EST. IN CURIOSITY</text>
+  </g>
+  <text x="422" y="136" fill="#edf2f5" font-family="Consolas, 'Liberation Mono', monospace" font-size="55" font-weight="600" letter-spacing="6">BEERBARNABY</text>
+  <text x="424" y="181" fill="#a6b6c6" font-family="Consolas, 'Liberation Mono', monospace" font-size="17" letter-spacing="4">BEYOND THE VISIBLE</text>
+  <path d="M422 214H1112" stroke="url(#line)" stroke-width="1"/>
+  <g fill="#c4d0db" font-family="Consolas, 'Liberation Mono', monospace" font-size="12" letter-spacing="2">
+    <text x="424" y="252">AI SYSTEMS</text>
+    <text x="620" y="252">AGENT BEHAVIOR</text>
+    <text x="870" y="252">SOFTWARE ENGINEERING</text>
+  </g>
+  <text x="424" y="308" fill="#8295a7" font-family="Consolas, 'Liberation Mono', monospace" font-size="11" letter-spacing="1.7">QUIETLY BUILDING. ALWAYS QUESTIONING.</text>
+</svg>
