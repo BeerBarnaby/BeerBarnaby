@@ -1,29 +1,32 @@
 <div align="center">
-  <img src="./assets/after-dark.svg" alt="BeerBarnaby — Beyond the visible. AI systems, agent behavior, and software engineering." width="100%" />
+  <img src="./assets/terminal-profile.svg" width="100%" alt="BeerBarnaby — dark terminal identity, crescent moon and developer profile" />
 
   <br />
-
   <samp>Not every idea needs a spotlight.</samp>
 </div>
 
 <br />
 
-```text
-> connection established
-> identity   : BeerBarnaby
-> interests  : intelligence / behavior / interfaces
-> approach   : observe -> question -> build -> evaluate
-> status     : quietly in progress
+```console
+$ whoami
+beerbarnaby
+
+$ cat /etc/motd
+Some signals are meant to stay hidden.
 ```
 
-### `01 / INSTRUMENTS`
+<details>
+<summary><code>↳ reveal installed tools</code></summary>
+
+<br />
 
 `Python` · `TypeScript` · `JavaScript` · `Next.js` · `SQL` · `Docker` · `Git`
 
 `LLMs` · `Multi-Agent Systems` · `AI Evaluation` · `APIs`
 
----
+</details>
 
 <div align="center">
+  <br />
   <sub>THE INTERESTING PART IS USUALLY WHAT YOU CAN'T SEE.</sub>
 </div>
