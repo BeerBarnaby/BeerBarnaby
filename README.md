@@ -16,15 +16,7 @@
 > status     : quietly in progress
 ```
 
-### `01 / BELOW THE SURFACE`
-
-I build **AI-powered software** and explore how intelligent systems behave.
-
-My work moves between **LLM applications**, **multi-agent experiments**, **model evaluation**, and **full-stack engineering**.
-
-Less noise. Better questions. Systems that actually work.
-
-### `02 / INSTRUMENTS`
+### `01 / INSTRUMENTS`
 
 `Python` · `TypeScript` · `JavaScript` · `Next.js` · `SQL` · `Docker` · `Git`
 
