@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="510" viewBox="0 0 1100 510" role="img" aria-labelledby="title desc">
+<title id="title">BeerBarnaby — terminal profile</title>
+<desc id="desc">A mysterious dark terminal with a crescent moon, system information and a developer toolset.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+    <stop offset="0" stop-color="#0b111d"/>
+    <stop offset="1" stop-color="#070a10"/>
+  </linearGradient>
+  <linearGradient id="moon" x1="0" x2="1" y1="0" y2="1">
+    <stop offset="0" stop-color="#e4eef5"/>
+    <stop offset="1" stop-color="#8ca8bf"/>
+  </linearGradient>
+  <clipPath id="orb"><circle cx="239" cy="249" r="107"/></clipPath>
+</defs>
+<rect width="1100" height="510" rx="22" fill="url(#bg)"/>
+<rect x="1" y="1" width="1098" height="508" rx="21" stroke="#344358" stroke-width="2" fill="none" />
+<path d="M1 65H1099" stroke="#2a3749"/>
+<circle cx="34" cy="33" r="7" fill="#a65b68"/>
+<circle cx="59" cy="33" r="7" fill="#b49b67"/>
+<circle cx="84" cy="33" r="7" fill="#678c83"/>
+<g font-family="monospace" font-size="18" fill="#7b8fa3">
+ <text x="130" y="40">beerbarnaby@nightshift: ~</text>
+ <text x="1062" y="40" text-anchor="end">[ encrypted session ]</text>
+</g>
+<g opacity=".65" fill="#9caec3">
+  <circle cx="75" cy="133" r="1.7"/><circle cx="396" cy="163" r="1.8"/>
+  <circle cx="135" cy="322" r="1.5"/><circle cx="362" cy="375" r="1.6"/>
+  <circle cx="371" cy="109" r="1.2"/><circle cx="112" cy="213" r="1.1"/>
+  <circle cx="294" cy="117" r="1.2"/><circle cx="57" cy="403" r="1.3"/>
+  <circle cx="430" cy="293" r="1.4"/>
+</g>
+<g opacity=".35" fill="none" stroke="#61778f">
+  <circle cx="239" cy="249" r="136" stroke-dasharray="2 14"/>
+  <path d="M59 249h42M378 249h47 M239 82v37 M239 384v35"/>
+  <path d="M145 419h188" stroke-dasharray="2 9"/>
+</g>
+<circle cx="239" cy="249" r="107" fill="none" stroke="#b3c7d8" stroke-width="1.6" opacity=".7"/>
+<g clip-path="url(#orb)">
+ <circle cx="237" cy="249" r="83" fill="url(#moon)"/>
+ <circle cx="279" cy="221" r="83" fill="#0b111c"/>
+</g>
+<g fill="#64788c" font-family="monospace" font-size="15">
+  <text x="239" y="448" text-anchor="middle">[ 0x00 : UNKNOWN ]</text>
+</g>
+<path d="M483 105V430" stroke="#2d3b4c" stroke-width="1.3"/>
+<g font-family="monospace">
+  <text x="522" y="120" fill="#dfe9f2" font-size="28" font-weight="bold">beerbarnaby</text>
+  <text x="734" y="120" fill="#8398aa" font-size="18">@github</text>
+  <path d="M522 140H1034" stroke="#506176" stroke-dasharray="8 5"/>
+  <g font-size="18">
+    <text x="522" y="181" fill="#88bbba">SYSTEM</text>
+    <text x="679" y="181" fill="#dce4ec">independent builder</text>
+    <text x="522" y="219" fill="#88bbba">FOCUS</text>
+    <text x="679" y="219" fill="#dce4ec">AI / autonomous systems</text>
+    <text x="522" y="257" fill="#88bbba">LANGUAGES</text>
+    <text x="679" y="257" fill="#dce4ec">Python, TypeScript, JS</text>
+    <text x="522" y="295" fill="#88bbba">TOOLKIT</text>
+    <text x="679" y="295" fill="#dce4ec">Git, Docker, SQL, Next.js</text>
+    <text x="522" y="333" fill="#88bbba">METHOD</text>
+    <text x="679" y="333" fill="#dce4ec">observe / build / test</text>
+    <text x="522" y="371" fill="#88bbba">STATUS</text>
+    <text x="679" y="371" fill="#dce4ec">somewhere in the code</text>
+  </g>
+  <path d="M522 401H1034" stroke="#506176" stroke-dasharray="8 5"/>
+  <text x="522" y="438" font-size="16" fill="#7c95a9">$ _</text>
+  <rect x="562" y="420" width="10" height="20" fill="#93b7bb" opacity=".9"/>
+</g>
+<g font-family="monospace" font-size="13" fill="#577088">
+  <text x="33" y="487">SIGNAL: LOW</text>
+  <text x="1064" y="487" text-anchor="end">NOT EVERYTHING NEEDS TO BE EXPLAINED.</text>
+</g>
+</svg>
