@@ -6,6 +6,7 @@ const KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export type CheckInResult =
   | { status: "allowed"; name: string; class: string }
+  | { status: "already"; name: string; class: string; first_at: string }
   | { status: "blocked"; name: string; reason: string | null; until: string | null }
   | { status: "not_found" };
 

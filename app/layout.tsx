@@ -1,4 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import "@fontsource/ibm-plex-sans-thai/300.css";
+import "@fontsource/ibm-plex-sans-thai/400.css";
+import "@fontsource/ibm-plex-sans-thai/500.css";
+import "@fontsource/ibm-plex-sans-thai/600.css";
+import "@fontsource/ibm-plex-sans-thai/700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,7 +15,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#f4f1ea",
+  themeColor: "#12284c",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

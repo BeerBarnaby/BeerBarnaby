@@ -7,6 +7,7 @@ import Stats from "./Stats";
 
 // เหตุผลสำเร็จรูป — แก้รายการนี้ได้ตามที่ห้องสมุดใช้จริง
 const PRESET_REASONS = [
+  "ชั่วโมงกิจกรรมไม่ครบ ต้องเข้าฟังบรรยายที่หอประชุม",
   "ค้างส่งหนังสือ",
   "ทำผิดระเบียบห้องสมุด",
   "ส่งเสียงดังรบกวนผู้อื่น",
@@ -28,6 +29,7 @@ export default function Staff() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [klass, setKlass] = useState("");
   const [query, setQuery] = useState("");
+  const [pasteText, setPasteText] = useState("");
   const [draft, setDraft] = useState<Draft | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -168,7 +170,23 @@ export default function Staff() {
       return next;
     });
 
+  // ดึงรหัส 5 หลักทั้งหมดจากข้อความที่วาง (คัดลอกจากเอกสาร/ตารางมาได้ทั้งก้อน) แล้วติ๊กให้
+  const selectPasted = () => {
+    const found = Array.from(new Set(pasteText.match(/(?<!\d)\d{5}(?!\d)/g) ?? []));
+    const known = new Set((roster ?? []).map((s) => s.student_id));
+    const ok = found.filter((id) => known.has(id));
+    const missing = found.filter((id) => !known.has(id));
+    setKlass("");
+    setQuery("");
+    setSelected((cur) => new Set([...Array.from(cur), ...ok]));
+    setError(missing.length ? `ไม่พบในรายชื่อนักเรียน: ${missing.join(", ")}` : "");
+    setNotice(found.length ? `เลือกจากข้อความที่วาง ${ok.length} คน` : "");
+    if (!found.length) setError("ไม่พบรหัส 5 หลักในข้อความที่วาง");
+    if (ok.length) setPasteText("");
+  };
+
   const openDraft = (ids: string[]) => {
+    setError("");
     const current = ids.length === 1 ? items.find((i) => i.student_id === ids[0]) : undefined;
     setDraft({ ids, reason: current?.reason ?? "", until: current?.until ?? "" });
   };
@@ -204,140 +222,185 @@ export default function Staff() {
 
   if (!pin) {
     return (
-      <main className="staff staff-login">
-        <form onSubmit={login} className="card">
+      <main className="login">
+        <section className="login-side">
+          <span className="kicker">ห้องสมุด</span>
           <h1>โหมดครู</h1>
-          <p className="muted">ใส่รหัสของครูเพื่อจัดการรายชื่อห้ามเข้า</p>
+          <p>จัดการรายชื่อนักเรียนที่เข้าใช้ไม่ได้ กำหนดเหตุผล และดูสถิติการเข้าใช้</p>
+        </section>
+        <form onSubmit={login} className="login-form">
+          <label className="label" htmlFor="pin">รหัสครู</label>
           <input
+            id="pin"
             className="field field-pin"
             type="password"
             autoComplete="off"
             autoFocus
-            placeholder="รหัสครู"
             value={pinInput}
             onChange={(e) => setPinInput(e.target.value)}
-            aria-label="รหัสครู"
           />
           {error && <p className="alert" role="alert">{error}</p>}
           <button className="btn btn-primary" disabled={busy || !pinInput.trim()}>
             {busy ? "กำลังตรวจสอบ…" : "เข้าสู่โหมดครู"}
           </button>
-          <Link className="ghost center" href="/">กลับหน้าเช็กอิน</Link>
+          <Link className="link" href="/">← กลับหน้าเช็กอิน</Link>
         </form>
       </main>
     );
   }
 
   const selectedIds = Array.from(selected);
+  const heading =
+    tab === "blocked"
+      ? { title: "รายชื่อที่เข้าใช้ไม่ได้", sub: "ติ๊กเลือกเพื่อเปลี่ยนเหตุผลหรือปลดออกทีละหลายคน" }
+      : tab === "add"
+        ? { title: "เพิ่มรายชื่อ", sub: "เลือกนักเรียนทีละคนหรือทั้งห้อง แล้วกำหนดเหตุผลครั้งเดียว" }
+        : { title: "สถิติการเข้าใช้", sub: "นับจากการเช็กอินที่หน้าจอ ตามเวลาไทย" };
 
   return (
-    <main className="staff">
-      <header className="staff-top">
-        <div>
-          <h1>จัดการห้องสมุด</h1>
-          <p className="muted">ครู{staff ? `: ${staff}` : ""}</p>
+    <div className="shell">
+      <aside className="nav">
+        <div className="nav-head">
+          <span className="kicker">โหมดครู</span>
+          <strong>ห้องสมุด</strong>
         </div>
-        <div className="staff-top-actions">
-          <Link className="ghost" href="/">หน้าเช็กอิน</Link>
-          <button className="ghost" onClick={() => logout()}>ออกจากระบบ</button>
+        <nav className="tabs" role="tablist">
+          <button role="tab" aria-selected={tab === "blocked"} className="tab" onClick={() => switchTab("blocked")}>
+            ห้ามเข้า ({items.length})
+          </button>
+          <button role="tab" aria-selected={tab === "add"} className="tab" onClick={() => switchTab("add")}>
+            เพิ่มรายชื่อ
+          </button>
+          <button role="tab" aria-selected={tab === "stats"} className="tab" onClick={() => switchTab("stats")}>
+            สถิติ
+          </button>
+        </nav>
+        <div className="nav-foot">
+          {staff && <span className="nav-user">{staff}</span>}
+          <Link className="link" href="/">หน้าเช็กอิน</Link>
+          <button className="link" onClick={() => logout()}>ออกจากระบบ</button>
         </div>
-      </header>
+      </aside>
 
-      <nav className="tabs" role="tablist">
-        <button role="tab" aria-selected={tab === "blocked"} className="tab" onClick={() => switchTab("blocked")}>
-          ห้ามเข้า ({items.length})
-        </button>
-        <button role="tab" aria-selected={tab === "add"} className="tab" onClick={() => switchTab("add")}>
-          + เพิ่ม
-        </button>
-        <button role="tab" aria-selected={tab === "stats"} className="tab" onClick={() => switchTab("stats")}>
-          สถิติ
-        </button>
-      </nav>
+      <main className="content">
+        <header className="content-head">
+          <h1>{heading.title}</h1>
+          <p className="muted">{heading.sub}</p>
+        </header>
 
-      {error && <p className="alert" role="alert">{error}</p>}
-      {notice && <p className="notice" role="status">{notice}</p>}
+        {error && <p className="alert" role="alert">{error}</p>}
+        {notice && <p className="notice" role="status">{notice}</p>}
 
-      {tab === "stats" && <Stats load={loadStats} />}
+        {tab === "stats" && <Stats load={loadStats} />}
 
-      {tab === "add" && (
-        <div className="filters">
-          <select className="field" value={klass} onChange={(e) => setKlass(e.target.value)} aria-label="ห้อง">
-            <option value="">ทุกห้อง</option>
-            {classes.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-          <input
-            className="field"
-            type="search"
-            placeholder="ค้นหาชื่อหรือรหัส"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-label="ค้นหาชื่อหรือรหัส"
-          />
-        </div>
-      )}
+        {tab === "add" && (
+          <div className="filters">
+            <select className="field" value={klass} onChange={(e) => setKlass(e.target.value)} aria-label="ห้อง">
+              <option value="">ทุกห้อง</option>
+              {classes.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <input
+              className="field"
+              type="search"
+              placeholder="ค้นหาชื่อหรือรหัส"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-label="ค้นหาชื่อหรือรหัส"
+            />
+            <details className="paste">
+              <summary>วางรหัสหลายคนพร้อมกัน</summary>
+              <p className="muted">คัดลอกตารางรายชื่อจากเอกสารมาวางได้ทั้งก้อน ระบบจะหยิบเฉพาะรหัส 5 หลัก</p>
+              <textarea
+                className="field"
+                rows={4}
+                placeholder={"เช่น\n05669 ม.3/1 เด็กชาย…\n05703 ม.3/4 เด็กชาย…"}
+                value={pasteText}
+                onChange={(e) => setPasteText(e.target.value)}
+                aria-label="วางรหัสนักเรียน"
+              />
+              <button className="btn" type="button" disabled={!pasteText.trim() || roster === null} onClick={selectPasted}>
+                เลือกรหัสเหล่านี้
+              </button>
+            </details>
+          </div>
+        )}
 
-      {visibleIds.length > 0 && (
-        <label className="row row-all">
-          <input type="checkbox" checked={allVisibleSelected} onChange={toggleAllVisible} />
-          <span>เลือกทั้งหมดที่แสดง ({visibleIds.length} คน)</span>
-        </label>
-      )}
-
-      <ul className="list">
-        {tab === "blocked" &&
-          items.map((i) => (
-            <li key={i.student_id} className={`row${selected.has(i.student_id) ? " row-on" : ""}`}>
-              <label className="row-main">
-                <input type="checkbox" checked={selected.has(i.student_id)} onChange={() => toggle(i.student_id)} />
-                <span className="row-text">
-                  <strong>{i.full_name ?? "(ไม่พบชื่อ)"}</strong>
-                  <span className="muted">
-                    {i.student_id}
-                    {i.class_name ? ` · ${i.class_name}` : ""}
-                  </span>
-                  <span className="reason">{i.reason || "ไม่ได้ระบุเหตุผล"}</span>
-                  <span className="muted">
-                    {i.until ? `ถึง ${thaiDate(i.until)}` : "ไม่มีกำหนด"}
-                    {i.added_by ? ` · โดย ${i.added_by}` : ""}
-                  </span>
-                </span>
+        {visibleIds.length > 0 && (
+          <div className={`table table-${tab}`}>
+            <div className="thead">
+              <label className="row-all">
+                <input type="checkbox" checked={allVisibleSelected} onChange={toggleAllVisible} />
+                <span className="row-all-text">เลือกทั้งหมดที่แสดง ({visibleIds.length} คน)</span>
               </label>
-              {!i.active && <span className="badge">หมดอายุแล้ว</span>}
-              <button className="btn btn-small" onClick={() => openDraft([i.student_id])}>แก้เหตุผล</button>
-            </li>
-          ))}
+              <span>รหัส</span>
+              <span>ชื่อ</span>
+              <span>ห้อง</span>
+              {tab === "blocked" ? (
+                <>
+                  <span>เหตุผล</span>
+                  <span>ห้ามถึง</span>
+                  <span />
+                </>
+              ) : (
+                <>
+                  <span>เลขที่</span>
+                  <span>สถานะ</span>
+                </>
+              )}
+            </div>
 
-        {tab === "add" &&
-          visibleRoster.map((s) => (
-            <li key={s.student_id} className={`row${selected.has(s.student_id) ? " row-on" : ""}`}>
-              <label className="row-main">
-                <input type="checkbox" checked={selected.has(s.student_id)} onChange={() => toggle(s.student_id)} />
-                <span className="row-text">
-                  <strong>{s.full_name}</strong>
-                  <span className="muted">
-                    {s.student_id} · {s.class_name}
-                    {s.class_no ? ` · เลขที่ ${s.class_no}` : ""}
-                  </span>
-                  {s.blocked && <span className="reason">ห้ามเข้าอยู่: {s.reason || "ไม่ได้ระบุเหตุผล"}</span>}
-                </span>
-              </label>
-            </li>
-          ))}
-      </ul>
+            <ul className="list">
+              {tab === "blocked" &&
+                items.map((i) => (
+                  <li key={i.student_id} className={`row${selected.has(i.student_id) ? " row-on" : ""}`}>
+                    <label className="row-main">
+                      <input type="checkbox" checked={selected.has(i.student_id)} onChange={() => toggle(i.student_id)} />
+                      <span className="c-id">{i.student_id}</span>
+                      <strong className="c-name">{i.full_name ?? "(ไม่พบชื่อ)"}</strong>
+                      <span className="c-class">{i.class_name ?? ""}</span>
+                      <span className="c-reason reason">{i.reason || "ไม่ได้ระบุเหตุผล"}</span>
+                      <span className="c-until">
+                        {i.until ? thaiDate(i.until) : "ไม่มีกำหนด"}
+                        {!i.active && <em className="badge">หมดอายุแล้ว</em>}
+                        {i.added_by && <small>โดย {i.added_by}</small>}
+                      </span>
+                    </label>
+                    <button className="btn btn-small c-action" onClick={() => openDraft([i.student_id])}>แก้เหตุผล</button>
+                  </li>
+                ))}
 
-      {tab === "blocked" && items.length === 0 && !busy && (
-        <p className="empty">ยังไม่มีใครถูกห้ามเข้า กด “+ เพิ่ม” เพื่อเลือกนักเรียน</p>
-      )}
-      {tab === "add" && roster === null && <p className="empty">{busy ? "กำลังโหลดรายชื่อ…" : "โหลดรายชื่อไม่สำเร็จ"}</p>}
-      {tab === "add" && roster !== null && visibleRoster.length === 0 && <p className="empty">ไม่พบนักเรียนตามที่ค้นหา</p>}
+              {tab === "add" &&
+                visibleRoster.map((s) => (
+                  <li key={s.student_id} className={`row${selected.has(s.student_id) ? " row-on" : ""}`}>
+                    <label className="row-main">
+                      <input type="checkbox" checked={selected.has(s.student_id)} onChange={() => toggle(s.student_id)} />
+                      <span className="c-id">{s.student_id}</span>
+                      <strong className="c-name">{s.full_name}</strong>
+                      <span className="c-class">{s.class_name}</span>
+                      <span className="c-no">{s.class_no ?? ""}</span>
+                      <span className="c-reason">
+                        {s.blocked ? <span className="reason">ห้ามเข้าอยู่: {s.reason || "ไม่ได้ระบุเหตุผล"}</span> : ""}
+                      </span>
+                    </label>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+
+        {tab === "blocked" && items.length === 0 && !busy && (
+          <p className="empty">ยังไม่มีใครถูกห้ามเข้า ไปที่ “เพิ่มรายชื่อ” เพื่อเลือกนักเรียน</p>
+        )}
+        {tab === "add" && roster === null && <p className="empty">{busy ? "กำลังโหลดรายชื่อ…" : "โหลดรายชื่อไม่สำเร็จ"}</p>}
+        {tab === "add" && roster !== null && visibleRoster.length === 0 && <p className="empty">ไม่พบนักเรียนตามที่ค้นหา</p>}
+      </main>
 
       {selectedIds.length > 0 && (
         <div className="actionbar">
           <span>เลือกแล้ว {selectedIds.length} คน</span>
-          <button className="ghost" onClick={() => setSelected(new Set())}>ยกเลิก</button>
+          <button className="link" onClick={() => setSelected(new Set())}>ยกเลิก</button>
           {tab === "blocked" && (
             <button className="btn" disabled={busy} onClick={() => unblock(selectedIds)}>ปลดออก</button>
           )}
@@ -349,7 +412,7 @@ export default function Staff() {
 
       {draft && (
         <div className="overlay" role="dialog" aria-modal="true" aria-label="กำหนดเหตุผล">
-          <div className="card dialog">
+          <div className="dialog">
             <h2>ห้ามเข้า {draft.ids.length} คน</h2>
             <p className="muted">
               {draft.ids.slice(0, 3).map(nameOf).join(", ")}
@@ -397,6 +460,6 @@ export default function Staff() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

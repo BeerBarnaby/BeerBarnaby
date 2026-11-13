@@ -153,8 +153,8 @@ export default function Stats({ load }: { load: (days: number) => Promise<StatsD
       {summary.total === 0 ? (
         <p className="empty">ยังไม่มีการเข้าใช้ห้องสมุดในช่วง {days} วันนี้</p>
       ) : (
-        <>
-          <figure className="panel">
+        <div className="stats-grid">
+          <figure className="panel panel-wide">
             <figcaption>
               <h2>จำนวนเข้าใช้ต่อวัน</h2>
               <p className="muted">{dayLabel(data.from)} – {dayLabel(data.to)}</p>
@@ -199,7 +199,7 @@ export default function Stats({ load }: { load: (days: number) => Promise<StatsD
               ))}
             </ul>
           </figure>
-        </>
+        </div>
       )}
     </section>
   );
