@@ -1,0 +1,22 @@
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "เช็กอินห้องสมุด",
+  description: "ระบบเช็กอินเข้าใช้ห้องสมุด",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#f4f1ea",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="th">
+      <body>{children}</body>
+    </html>
+  );
+}
