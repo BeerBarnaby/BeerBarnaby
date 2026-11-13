@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { rpc, thaiDate, type BlockItem, type StaffResult, type Student } from "../../lib/rpc";
+import { rpc, thaiDate, type BlockItem, type StaffResult, type StatsData, type Student } from "../../lib/rpc";
+import Stats from "./Stats";
 
 // เหตุผลสำเร็จรูป — แก้รายการนี้ได้ตามที่ห้องสมุดใช้จริง
 const PRESET_REASONS = [
@@ -14,7 +15,7 @@ const PRESET_REASONS = [
 
 const IDLE_LOGOUT_MS = 5 * 60 * 1000;
 
-type Tab = "blocked" | "add";
+type Tab = "blocked" | "add" | "stats";
 type Draft = { ids: string[]; reason: string; until: string };
 
 export default function Staff() {
@@ -85,6 +86,11 @@ export default function Staff() {
     [call],
   );
 
+  const loadStats = useCallback(
+    async (days: number) => (pin ? call<StatsData>("staff_stats", { p_days: days }, pin) : null),
+    [call, pin],
+  );
+
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
     const candidate = pinInput.trim();
@@ -152,7 +158,8 @@ export default function Staff() {
       return next;
     });
 
-  const visibleIds = tab === "blocked" ? items.map((i) => i.student_id) : visibleRoster.map((s) => s.student_id);
+  const visibleIds =
+    tab === "blocked" ? items.map((i) => i.student_id) : tab === "add" ? visibleRoster.map((s) => s.student_id) : [];
   const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selected.has(id));
   const toggleAllVisible = () =>
     setSelected((cur) => {
@@ -227,7 +234,7 @@ export default function Staff() {
     <main className="staff">
       <header className="staff-top">
         <div>
-          <h1>รายชื่อห้ามเข้าห้องสมุด</h1>
+          <h1>จัดการห้องสมุด</h1>
           <p className="muted">ครู{staff ? `: ${staff}` : ""}</p>
         </div>
         <div className="staff-top-actions">
@@ -238,15 +245,20 @@ export default function Staff() {
 
       <nav className="tabs" role="tablist">
         <button role="tab" aria-selected={tab === "blocked"} className="tab" onClick={() => switchTab("blocked")}>
-          ห้ามเข้าอยู่ ({items.length})
+          ห้ามเข้า ({items.length})
         </button>
         <button role="tab" aria-selected={tab === "add"} className="tab" onClick={() => switchTab("add")}>
-          + เพิ่มรายชื่อ
+          + เพิ่ม
+        </button>
+        <button role="tab" aria-selected={tab === "stats"} className="tab" onClick={() => switchTab("stats")}>
+          สถิติ
         </button>
       </nav>
 
       {error && <p className="alert" role="alert">{error}</p>}
       {notice && <p className="notice" role="status">{notice}</p>}
+
+      {tab === "stats" && <Stats load={loadStats} />}
 
       {tab === "add" && (
         <div className="filters">
@@ -317,7 +329,7 @@ export default function Staff() {
       </ul>
 
       {tab === "blocked" && items.length === 0 && !busy && (
-        <p className="empty">ยังไม่มีใครถูกห้ามเข้า กด “+ เพิ่มรายชื่อ” เพื่อเลือกนักเรียน</p>
+        <p className="empty">ยังไม่มีใครถูกห้ามเข้า กด “+ เพิ่ม” เพื่อเลือกนักเรียน</p>
       )}
       {tab === "add" && roster === null && <p className="empty">{busy ? "กำลังโหลดรายชื่อ…" : "โหลดรายชื่อไม่สำเร็จ"}</p>}
       {tab === "add" && roster !== null && visibleRoster.length === 0 && <p className="empty">ไม่พบนักเรียนตามที่ค้นหา</p>}

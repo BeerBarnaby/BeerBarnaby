@@ -30,6 +30,15 @@ export type Student = {
   until: string | null;
 };
 
+export type StatsData = {
+  from: string;
+  to: string;
+  summary: { today: number; total: number; students: number; blocked: number; not_found: number };
+  days: { day: string; count: number }[];
+  hours: { hour: number; count: number }[];
+  levels: { level: string; count: number; students: number; enrolled: number }[];
+};
+
 export type StaffFail = { ok: false; error: string; locked?: boolean; retry_after?: number };
 export type StaffResult<T> = ({ ok: true } & T) | StaffFail;
 
