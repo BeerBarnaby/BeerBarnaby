@@ -28,11 +28,20 @@ function downloadCsv(name: string, rows: (string | number | null)[][]) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export default function Visits({ load }: { load: (day: string) => Promise<VisitsData | null> }) {
+type ClearResult = { removed: number; students: number } | null;
+
+export default function Visits({
+  load,
+  clear,
+}: {
+  load: (day: string) => Promise<VisitsData | null>;
+  clear: (day: string, ids: string[] | null) => Promise<ClearResult>;
+}) {
   const [day, setDay] = useState(todayInBangkok);
   const [data, setData] = useState<VisitsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [klass, setKlass] = useState("");
+  const [message, setMessage] = useState("");
 
   const refresh = useCallback(
     async (d: string) => {
@@ -45,8 +54,29 @@ export default function Visits({ load }: { load: (day: string) => Promise<Visits
   );
 
   useEffect(() => {
+    setMessage("");
     refresh(day);
   }, [day, refresh]);
+
+  // ยกเลิกการเช็กอินของคนเดียว (เช่น กดรหัสผิดเป็นของเพื่อน)
+  const removeOne = async (id: string, name: string | null) => {
+    if (!window.confirm(`ลบการเข้าใช้ของ ${name ?? id} ในวันนี้?\nนักเรียนคนนี้จะเช็กอินใหม่ได้`)) return;
+    const res = await clear(day, [id]);
+    if (res) setMessage(`ลบการเข้าใช้ของ ${name ?? id} แล้ว`);
+    await refresh(day);
+  };
+
+  // ล้างทั้งวัน: ให้ครูพิมพ์คำยืนยัน เพราะลบแล้วกู้คืนไม่ได้
+  const clearDay = async () => {
+    if (!data) return;
+    const typed = window.prompt(
+      `ล้างการเข้าใช้ทั้งหมดของ${longDate(data.day)} (${data.items.length} คน)\nลบแล้วกู้คืนไม่ได้ — พิมพ์คำว่า ล้าง เพื่อยืนยัน`,
+    );
+    if (typed?.trim() !== "ล้าง") return;
+    const res = await clear(day, null);
+    if (res) setMessage(`ล้างแล้ว ${res.students} คน (${res.removed} รายการ)`);
+    await refresh(day);
+  };
 
   const classes = useMemo(
     () =>
@@ -83,7 +113,12 @@ export default function Visits({ load }: { load: (day: string) => Promise<Visits
         </label>
         <button className="btn" onClick={() => refresh(day)} disabled={loading}>รีเฟรช</button>
         <button className="btn btn-primary" onClick={exportCsv} disabled={!items.length}>ดาวน์โหลด Excel</button>
+        <button className="btn btn-danger" onClick={clearDay} disabled={loading || !data || (!data.items.length && !data.blocked.length)}>
+          ล้างทั้งวัน
+        </button>
       </div>
+
+      {message && <p className="notice" role="status">{message}</p>}
 
       {data && (
         <p className="visits-count">
@@ -99,6 +134,7 @@ export default function Visits({ load }: { load: (day: string) => Promise<Visits
             <span>ชื่อ</span>
             <span>ห้อง</span>
             <span>เลขที่</span>
+            <span />
           </div>
           <ul className="list">
             {items.map((i) => (
@@ -111,6 +147,9 @@ export default function Visits({ load }: { load: (day: string) => Promise<Visits
                 <strong className="v-name">{i.full_name ?? "(ไม่พบชื่อ)"}</strong>
                 <span className="v-class">{i.class_name ?? ""}</span>
                 <span className="v-no">{i.class_no ?? ""}</span>
+                <button className="btn btn-small v-del" onClick={() => removeOne(i.student_id, i.full_name)} disabled={loading}>
+                  ลบ
+                </button>
               </li>
             ))}
           </ul>

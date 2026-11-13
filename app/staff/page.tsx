@@ -94,6 +94,12 @@ export default function Staff() {
     [call, pin],
   );
 
+  const clearVisits = useCallback(
+    async (day: string, ids: string[] | null) =>
+      pin ? call<{ removed: number; students: number }>("staff_visits_clear", { p_day: day, p_ids: ids }, pin) : null,
+    [call, pin],
+  );
+
   const loadStats = useCallback(
     async (days: number) => (pin ? call<StatsData>("staff_stats", { p_days: days }, pin) : null),
     [call, pin],
@@ -303,7 +309,7 @@ export default function Staff() {
         {notice && <p className="notice" role="status">{notice}</p>}
 
         {tab === "stats" && <Stats load={loadStats} />}
-        {tab === "visits" && <Visits load={loadVisits} />}
+        {tab === "visits" && <Visits load={loadVisits} clear={clearVisits} />}
 
         {tab === "add" && (
           <div className="filters">
