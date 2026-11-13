@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { rpc, thaiDate, type BlockItem, type StaffResult, type StatsData, type Student } from "../../lib/rpc";
+import { rpc, thaiDate, type BlockItem, type StaffResult, type StatsData, type Student, type VisitsData } from "../../lib/rpc";
 import Stats from "./Stats";
+import Visits from "./Visits";
 
 // เหตุผลสำเร็จรูป — แก้รายการนี้ได้ตามที่ห้องสมุดใช้จริง
 const PRESET_REASONS = [
@@ -16,7 +17,7 @@ const PRESET_REASONS = [
 
 const IDLE_LOGOUT_MS = 5 * 60 * 1000;
 
-type Tab = "blocked" | "add" | "stats";
+type Tab = "blocked" | "add" | "visits" | "stats";
 type Draft = { ids: string[]; reason: string; until: string };
 
 export default function Staff() {
@@ -86,6 +87,11 @@ export default function Staff() {
       if (res) setRoster(res.items);
     },
     [call],
+  );
+
+  const loadVisits = useCallback(
+    async (day: string) => (pin ? call<VisitsData>("staff_visits", { p_day: day || null }, pin) : null),
+    [call, pin],
   );
 
   const loadStats = useCallback(
@@ -254,8 +260,10 @@ export default function Staff() {
     tab === "blocked"
       ? { title: "รายชื่อที่เข้าใช้ไม่ได้", sub: "ติ๊กเลือกเพื่อเปลี่ยนเหตุผลหรือปลดออกทีละหลายคน" }
       : tab === "add"
-        ? { title: "เพิ่มรายชื่อ", sub: "เลือกนักเรียนทีละคนหรือทั้งห้อง แล้วกำหนดเหตุผลครั้งเดียว" }
-        : { title: "สถิติการเข้าใช้", sub: "นับจากการเช็กอินที่หน้าจอ ตามเวลาไทย" };
+        ? { title: "เพิ่มรายชื่อห้ามเข้า", sub: "พิมพ์หรือวางรหัสนักเรียน หรือติ๊กเลือกจากรายชื่อ แล้วกำหนดเหตุผลครั้งเดียว" }
+        : tab === "visits"
+          ? { title: "นักเรียนที่เข้าใช้", sub: "รายชื่อคนที่เช็กอินสำเร็จ แยกตามวัน (นับคนละครั้งต่อวัน)" }
+          : { title: "สถิติการเข้าใช้", sub: "นับจากการเช็กอินที่หน้าจอ ตามเวลาไทย" };
 
   return (
     <div className="shell">
@@ -270,6 +278,9 @@ export default function Staff() {
           </button>
           <button role="tab" aria-selected={tab === "add"} className="tab" onClick={() => switchTab("add")}>
             เพิ่มรายชื่อ
+          </button>
+          <button role="tab" aria-selected={tab === "visits"} className="tab" onClick={() => switchTab("visits")}>
+            ผู้เข้าใช้
           </button>
           <button role="tab" aria-selected={tab === "stats"} className="tab" onClick={() => switchTab("stats")}>
             สถิติ
@@ -292,6 +303,7 @@ export default function Staff() {
         {notice && <p className="notice" role="status">{notice}</p>}
 
         {tab === "stats" && <Stats load={loadStats} />}
+        {tab === "visits" && <Visits load={loadVisits} />}
 
         {tab === "add" && (
           <div className="filters">
@@ -309,21 +321,21 @@ export default function Staff() {
               onChange={(e) => setQuery(e.target.value)}
               aria-label="ค้นหาชื่อหรือรหัส"
             />
-            <details className="paste">
-              <summary>วางรหัสหลายคนพร้อมกัน</summary>
-              <p className="muted">คัดลอกตารางรายชื่อจากเอกสารมาวางได้ทั้งก้อน ระบบจะหยิบเฉพาะรหัส 5 หลัก</p>
+            <div className="paste">
+              <label className="label" htmlFor="paste-ids">พิมพ์หรือวางรหัสนักเรียน</label>
+              <p className="muted">พิมพ์รหัส 5 หลัก คั่นด้วยเว้นวรรคหรือขึ้นบรรทัดใหม่ หรือคัดลอกตารางจากเอกสารมาวางทั้งก้อนก็ได้</p>
               <textarea
                 className="field"
                 rows={4}
-                placeholder={"เช่น\n05669 ม.3/1 เด็กชาย…\n05703 ม.3/4 เด็กชาย…"}
+                placeholder={"เช่น 05669 05703 00012"}
                 value={pasteText}
                 onChange={(e) => setPasteText(e.target.value)}
-                aria-label="วางรหัสนักเรียน"
+                id="paste-ids"
               />
               <button className="btn" type="button" disabled={!pasteText.trim() || roster === null} onClick={selectPasted}>
                 เลือกรหัสเหล่านี้
               </button>
-            </details>
+            </div>
           </div>
         )}
 

@@ -40,6 +40,12 @@ export type StatsData = {
   levels: { level: string; count: number; students: number; enrolled: number }[];
 };
 
+export type VisitsData = {
+  day: string;
+  items: { student_id: string; full_name: string | null; class_name: string | null; class_no: number | null; time: string }[];
+  blocked: { student_id: string; full_name: string | null; class_name: string | null; time: string; tries: number; reason: string | null }[];
+};
+
 export type StaffFail = { ok: false; error: string; locked?: boolean; retry_after?: number };
 export type StaffResult<T> = ({ ok: true } & T) | StaffFail;
 

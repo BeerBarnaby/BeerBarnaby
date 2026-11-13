@@ -292,11 +292,9 @@ textarea.field { resize: vertical; }
 .content-head { border-bottom: 1.5px solid var(--ink); padding-bottom: 12px; }
 
 .filters { display: grid; grid-template-columns: 1fr; gap: 8px; }
-.paste { border: 1px dashed var(--line-strong); padding: 0 12px; background: var(--surface); }
-.paste[open] { padding-bottom: 12px; }
-.paste summary { min-height: 48px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
-.paste[open] summary { margin-bottom: 4px; }
-.paste .field { margin: 8px 0; }
+.paste { order: -1; border: 1.5px solid var(--navy); border-top-width: 4px; padding: 14px; background: var(--surface); display: flex; flex-direction: column; gap: 4px; }
+.paste .field { margin: 6px 0 8px; }
+.paste .btn { align-self: flex-start; }
 
 /* ตาราง: มือถือเป็นรายการ, จอคอมเป็นคอลัมน์จริง (ใช้ HTML ชุดเดียวกัน) */
 .table { background: var(--surface); border: 1px solid var(--line); }
@@ -583,4 +581,41 @@ textarea.field { resize: vertical; }
 @media (min-width: 900px) {
   .clock-compact .clock-time { font-size: 2rem; font-weight: 600; letter-spacing: 0; }
   .clock-compact .clock-date { font-size: 1rem; }
+}
+
+/* =========================================================
+   ผู้เข้าใช้
+   ========================================================= */
+
+.visits { display: flex; flex-direction: column; gap: 14px; }
+.visits-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: end; }
+.visits-day { display: flex; flex-direction: column; gap: 4px; }
+.visits-count { font-size: 1.05rem; }
+.visits-count strong { font-size: 1.6rem; color: var(--navy); }
+
+.table-visits .row { display: grid; grid-template-columns: 56px 1fr; column-gap: 10px; row-gap: 2px; align-items: baseline; }
+.v-time { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--navy); }
+.table-visits .v-time { grid-row: 1 / span 2; }
+.v-name { grid-column: 2; }
+.v-id, .v-class, .v-no { color: var(--muted); font-size: 0.9em; font-variant-numeric: tabular-nums; }
+.v-id { grid-column: 2; }
+.v-class, .v-no { display: none; }
+
+.attempts { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; }
+.attempts li { display: grid; grid-template-columns: 56px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.attempts-reason { display: block; font-size: 0.92em; }
+
+@media (max-width: 899px) {
+  .visits-bar .btn { min-height: 48px; }
+}
+
+@media (min-width: 900px) {
+  .visits-bar { grid-template-columns: 200px 160px auto auto; justify-content: start; }
+  .table-visits { --cols: 72px 90px minmax(220px, 2fr) 100px 70px; }
+  .table-visits .row { grid-template-columns: var(--cols); column-gap: 14px; align-items: center; min-height: 48px; }
+  .table-visits .v-time { grid-row: auto; }
+  .table-visits .v-name, .table-visits .v-id { grid-column: auto; }
+  .v-id, .v-class, .v-no { color: var(--ink); font-size: 1em; }
+  .v-class, .v-no { display: block; }
+  .v-class-inline { display: none; }
 }
